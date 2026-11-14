@@ -11,6 +11,7 @@ from api.routers import datasets as datasets_router
 from api.routers import analysis as analysis_router
 from api.routers import wallets as wallets_router
 from api.routers import reports as reports_router
+from api.routers import learning as learning_router
 
 # Initialize database tables
 init_db()
@@ -53,6 +54,7 @@ app.include_router(wallets_router.router)
 app.include_router(cases_router.router)
 app.include_router(reports_router.router)
 app.include_router(metrics_router.router, prefix="/api")
+app.include_router(learning_router.router)
 
 @app.get("/api/health")
 async def health():

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { CaseListItem, CaseDetail, PageView } from '../types';
-import { getCaseDetail, updateCase } from '../services/api';
+import { getCaseDetail, updateCase, submitFeedback } from '../services/api';
 
 interface InvestigationCasesProps {
   cases: CaseListItem[];
@@ -29,6 +29,8 @@ export const InvestigationCases: React.FC<InvestigationCasesProps> = ({
   const [analyst, setAnalyst] = useState('');
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [feedbackSending, setFeedbackSending] = useState(false);
+  const [feedbackResult, setFeedbackResult] = useState<string | null>(null);
 
   // Auto-select first case if none selected
   useEffect(() => {
@@ -428,6 +430,73 @@ export const InvestigationCases: React.FC<InvestigationCasesProps> = ({
                   <span style={{ color: '#16a34a', fontSize: '12px', fontWeight: 600 }}>
                     ✓ Saved
                   </span>
+                )}
+              </div>
+
+              {/* Learning Loop Feedback Buttons */}
+              <div
+                style={{
+                  padding: '12px',
+                  backgroundColor: 'var(--color-bg-cream)',
+                  borderRadius: 'var(--radius-card)',
+                  border: '1px solid var(--color-linen)',
+                }}
+              >
+                <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-ink-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  ANALYST FEEDBACK — This case is suspicious
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {(['confirm', 'reject', 'unsure'] as const).map((decision) => {
+                    const colors: Record<string, { bg: string; color: string; border: string }> = {
+                      confirm: { bg: '#d1fae5', color: '#059669', border: '#a7f3d0' },
+                      reject:  { bg: '#fee2e2', color: '#dc2626', border: '#fecaca' },
+                      unsure:  { bg: '#fef3c7', color: '#d97706', border: '#fde68a' },
+                    };
+                    const labels: Record<string, string> = {
+                      confirm: '✓ Suspicious (Confirm)',
+                      reject:  '✗ Not Suspicious (Reject)',
+                      unsure:  '? Unsure (Needs Review)',
+                    };
+                    const c = colors[decision];
+                    return (
+                      <button
+                        key={decision}
+                        disabled={feedbackSending}
+                        onClick={async () => {
+                          if (!activeCase) return;
+                          setFeedbackSending(true);
+                          setFeedbackResult(null);
+                          try {
+                            const clusterId = activeCase.cluster_id || activeCase.case_id;
+                            await submitFeedback(clusterId, decision, analyst || 'Lead AML Analyst');
+                            setFeedbackResult(`${decision === 'confirm' ? '✓ Marked as suspicious' : decision === 'reject' ? '✗ Marked as not suspicious' : '? Marked as unsure — added to review queue'}`);
+                          } catch (err: any) {
+                            setFeedbackResult(`Error: ${err.message}`);
+                          } finally {
+                            setFeedbackSending(false);
+                          }
+                        }}
+                        style={{
+                          padding: '6px 14px',
+                          backgroundColor: c.bg,
+                          color: c.color,
+                          border: `1px solid ${c.border}`,
+                          borderRadius: 'var(--radius-pill)',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          cursor: feedbackSending ? 'not-allowed' : 'pointer',
+                          opacity: feedbackSending ? 0.6 : 1,
+                        }}
+                      >
+                        {feedbackSending ? '…' : labels[decision]}
+                      </button>
+                    );
+                  })}
+                </div>
+                {feedbackResult && (
+                  <div style={{ marginTop: '8px', fontSize: '12px', color: feedbackResult.startsWith('Error') ? '#dc2626' : '#059669' }}>
+                    {feedbackResult}
+                  </div>
                 )}
               </div>
 

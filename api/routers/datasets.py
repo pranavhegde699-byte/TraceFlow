@@ -16,11 +16,23 @@ UPLOAD_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 # In-memory active dataset ID tracking
-_ACTIVE_DATASET_ID = "nft-sample-001"
+_ACTIVE_DATASET_ID: Optional[str] = None
 
 def get_active_dataset_id() -> str:
     global _ACTIVE_DATASET_ID
-    return _ACTIVE_DATASET_ID
+    if _ACTIVE_DATASET_ID:
+        return _ACTIVE_DATASET_ID
+    # Fallback to first available dataset in DB
+    try:
+        from api.database import SessionLocal
+        with SessionLocal() as db:
+            first_ds = db.query(DatasetModel).order_by(DatasetModel.created_at.desc()).first()
+            if first_ds:
+                _ACTIVE_DATASET_ID = first_ds.id
+                return _ACTIVE_DATASET_ID
+    except Exception:
+        pass
+    return "nft-sample-001"
 
 def set_active_dataset_id(ds_id: str):
     global _ACTIVE_DATASET_ID
@@ -30,6 +42,11 @@ def set_active_dataset_id(ds_id: str):
 def list_datasets(db: Session = Depends(get_db)):
     datasets = db.query(DatasetModel).order_by(DatasetModel.created_at.desc()).all()
     active_id = get_active_dataset_id()
+    valid_ids = [d.id for d in datasets]
+    if active_id not in valid_ids and datasets:
+        active_id = datasets[0].id
+        set_active_dataset_id(active_id)
+
     return {
         "active_dataset_id": active_id,
         "datasets": [
@@ -55,6 +72,13 @@ def select_dataset(dataset_id: str = Form(...), db: Session = Depends(get_db)):
     if not ds:
         raise HTTPException(status_code=404, detail="Dataset not found")
     set_active_dataset_id(dataset_id)
+    if ds.status != "analyzed":
+        try:
+            from traceflow.pipeline_runner import run_analysis_pipeline
+            run_analysis_pipeline(ds.file_path, ds.name, ds.id)
+            db.refresh(ds)
+        except Exception:
+            pass
     return {"status": "ok", "active_dataset_id": dataset_id, "name": ds.name}
 
 @router.post("/upload")
@@ -91,10 +115,16 @@ async def upload_dataset(
             total_volume=0.0,
             currency="ETH" if schema_type == "nft" else "USD",
             file_path=str(dest_path.resolve()),
-            status="ready"
+            status="processing"
         )
         db.add(dataset_rec)
         db.commit()
+
+        # Run pipeline immediately to compute SCC, fraud detectors, wallets & cases
+        from traceflow.pipeline_runner import run_analysis_pipeline
+        run_analysis_pipeline(dest_path, name, ds_id)
+        set_active_dataset_id(ds_id)
+        db.refresh(dataset_rec)
 
         # Preview rows as list of dicts
         preview_rows = df_preview.to_dicts()

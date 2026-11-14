@@ -1,0 +1,21 @@
+timestamp,action,case_id,cluster_id,actor,details
+2026-11-14T18:01:15.815465+00:00,add,case_inc_8b1d50e2,inc_8b1d50e2,demo_learning.py simulation demo_0,"Added case label=1, status=pending"
+2026-11-14T18:01:15.854804+00:00,add,case_inc_01e326f8,inc_01e326f8,demo_learning.py simulation demo_1,"Added case label=1, status=pending"
+2026-11-14T18:01:15.895648+00:00,add,case_inc_22ea9f8c,inc_22ea9f8c,demo_learning.py simulation demo_2,"Added case label=1, status=pending"
+2026-11-14T18:01:15.932034+00:00,add,case_inc_5fee55ce,inc_5fee55ce,demo_learning.py simulation demo_3,"Added case label=1, status=pending"
+2026-11-14T18:01:15.965313+00:00,add,case_inc_9245a489,inc_9245a489,demo_learning.py simulation demo_4,"Added case label=1, status=pending"
+2026-11-14T18:01:15.973411+00:00,approve,case_inc_8b1d50e2,inc_8b1d50e2,Demo Script — Simulation,Approved case by Demo Script — Simulation
+2026-11-14T18:01:15.981600+00:00,approve,case_inc_01e326f8,inc_01e326f8,Demo Script — Simulation,Approved case by Demo Script — Simulation
+2026-11-14T18:01:15.989288+00:00,approve,case_inc_22ea9f8c,inc_22ea9f8c,Demo Script — Simulation,Approved case by Demo Script — Simulation
+2026-11-14T18:01:15.997901+00:00,approve,case_inc_5fee55ce,inc_5fee55ce,Demo Script — Simulation,Approved case by Demo Script — Simulation
+2026-11-14T18:01:16.006990+00:00,approve,case_inc_9245a489,inc_9245a489,Demo Script — Simulation,Approved case by Demo Script — Simulation
+2026-11-14T18:02:38.609833+00:00,add,case_bee29c82,test_clust_01,Analyst Alice,"Added case label=1, status=approved"
+2026-11-14T18:21:46.671291+00:00,add,case_138ddee6,571ec0ce-e0af-42c2-8b72-6d9cb43eab8f,Senior Blockchain Fraud Specialist,"Added case label=1, status=approved"
+2026-11-14T18:21:51.895564+00:00,update,case_138ddee6,571ec0ce-e0af-42c2-8b72-6d9cb43eab8f,Senior Blockchain Fraud Specialist,"Updated case feedback, label=1, status=pending"
+2026-11-14T18:21:53.174014+00:00,update,case_138ddee6,571ec0ce-e0af-42c2-8b72-6d9cb43eab8f,Senior Blockchain Fraud Specialist,"Updated case feedback, label=0, status=approved"
+2026-11-14T18:21:54.794150+00:00,update,case_138ddee6,571ec0ce-e0af-42c2-8b72-6d9cb43eab8f,Senior Blockchain Fraud Specialist,"Updated case feedback, label=1, status=approved"
+2026-11-14T18:23:02.683571+00:00,update,case_138ddee6,571ec0ce-e0af-42c2-8b72-6d9cb43eab8f,Senior Blockchain Fraud Specialist,"Updated case feedback, label=1, status=approved"
+2026-11-14T18:31:38.291387+00:00,update,case_138ddee6,571ec0ce-e0af-42c2-8b72-6d9cb43eab8f,Senior Blockchain Fraud Specialist,"Updated case feedback, label=1, status=approved"
+2026-11-14T18:31:43.269425+00:00,add,case_dbbbcab1,f6794a08-979e-488b-824f-be8e1efede13,Senior Blockchain Fraud Specialist,"Added case label=1, status=approved"
+2026-11-14T18:33:09.601486+00:00,add,case_9db85adf,300a1a7f-8ccb-4c3b-81cb-9821740e09c6,Senior Blockchain Fraud Specialist,"Added case label=1, status=approved"
+2026-11-14T20:04:14.064805+00:00,add,case_15420cc0,bf41bc40-b895-4326-bbd0-b93276eb6f9f,Senior Blockchain Fraud Specialist,"Added case label=1, status=approved"

@@ -7,6 +7,9 @@ import type {
   AnalysisTaskStatus,
   WalletListResponse,
   WalletDetailResponse,
+  LearningStatus,
+  CaseStoreItem,
+  ModelRegistryItem,
 } from '../types';
 
 const BASE_URL = '/api';
@@ -187,5 +190,104 @@ export async function getWalletAiSummary(walletId: string, datasetId?: string): 
   const url = datasetId ? `${BASE_URL}/wallets/${walletId}/ai-summary?dataset_id=${datasetId}` : `${BASE_URL}/wallets/${walletId}/ai-summary`;
   const res = await fetch(url, { method: 'POST' });
   if (!res.ok) throw new Error('Failed to generate wallet AI forensic summary');
+  return res.json();
+}
+
+// ─── Learning Loop APIs ─────────────────────────────────────────────────────────
+
+export async function submitFeedback(
+  clusterId: string,
+  decision: 'confirm' | 'reject' | 'unsure',
+  analyst: string = 'Lead AML Analyst',
+  edgeIds?: number[],
+  accounts?: string[],
+  typology?: string,
+): Promise<any> {
+  const res = await fetch(`${BASE_URL}/feedback`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      cluster_id: clusterId,
+      decision,
+      analyst,
+      edge_ids: edgeIds,
+      accounts,
+      typology: typology || 'other',
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Feedback failed' }));
+    throw new Error(err.detail || 'Feedback failed');
+  }
+  return res.json();
+}
+
+export async function getLearningStatus(): Promise<LearningStatus> {
+  const res = await fetch(`${BASE_URL}/learning/status`);
+  if (!res.ok) throw new Error('Failed to fetch learning status');
+  return res.json();
+}
+
+export async function getLearningQueue(threshold?: number): Promise<{ total: number; queue: any[] }> {
+  const url = threshold != null ? `${BASE_URL}/learning/queue?threshold=${threshold}` : `${BASE_URL}/learning/queue`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch learning queue');
+  return res.json();
+}
+
+export async function getLearningCases(status?: string): Promise<{ total: number; cases: CaseStoreItem[] }> {
+  const url = status ? `${BASE_URL}/learning/cases?status=${status}` : `${BASE_URL}/learning/cases`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch learning cases');
+  return res.json();
+}
+
+export async function submitIncident(payload: {
+  title: string;
+  source_ref: string;
+  typology: string;
+  transactions: { src: string; dst: string; amount: number; currency: string; ts: string }[];
+}): Promise<any> {
+  const res = await fetch(`${BASE_URL}/incidents`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Incident submission failed' }));
+    throw new Error(err.detail || 'Incident submission failed');
+  }
+  return res.json();
+}
+
+export async function triggerRetrain(force: boolean = false): Promise<any> {
+  const res = await fetch(`${BASE_URL}/learning/retrain`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ force }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Retrain failed' }));
+    throw new Error(err.detail || 'Retrain failed');
+  }
+  return res.json();
+}
+
+export async function getModelRegistry(): Promise<{ total: number; models: ModelRegistryItem[] }> {
+  const res = await fetch(`${BASE_URL}/models`);
+  if (!res.ok) throw new Error('Failed to fetch model registry');
+  return res.json();
+}
+
+export async function rollbackModel(version: number): Promise<any> {
+  const res = await fetch(`${BASE_URL}/models/rollback`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ version }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Rollback failed' }));
+    throw new Error(err.detail || 'Rollback failed');
+  }
   return res.json();
 }

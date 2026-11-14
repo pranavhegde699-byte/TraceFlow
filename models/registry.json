@@ -1,0 +1,172 @@
+[
+  {
+    "version": 1,
+    "date": "2026-11-14T18:01:15.791358+00:00",
+    "model_path": "models\\ranker.txt",
+    "n_cases_used": 0,
+    "gate_metrics": {
+      "old_pr_auc": 0.71,
+      "candidate_pr_auc": 0.71,
+      "old_f1": 0.64,
+      "candidate_f1": 0.64,
+      "pr_auc_diff": 0.0,
+      "f1_diff": 0.0
+    },
+    "promoted": true,
+    "active": false
+  },
+  {
+    "version": 2,
+    "date": "2026-11-14T18:01:16.054054+00:00",
+    "model_path": "models\\versions\\ranker_v2.txt",
+    "n_cases_used": 5,
+    "gate_metrics": {
+      "old_pr_auc": 1.0,
+      "candidate_pr_auc": 1.0,
+      "old_f1": 1.0,
+      "candidate_f1": 1.0,
+      "pr_auc_diff": 0.0,
+      "f1_diff": 0.0,
+      "max_metric_drop_allowed": 0.01
+    },
+    "promoted": true,
+    "active": false
+  },
+  {
+    "version": 3,
+    "date": "2026-11-14T18:01:16.112333+00:00",
+    "model_path": "models\\versions\\ranker_v3.txt",
+    "n_cases_used": 5,
+    "gate_metrics": {
+      "old_pr_auc": 1.0,
+      "candidate_pr_auc": 0.2667,
+      "old_f1": 1.0,
+      "candidate_f1": 0.0,
+      "pr_auc_diff": -0.7333,
+      "f1_diff": -1.0,
+      "max_metric_drop_allowed": 0.01
+    },
+    "promoted": false,
+    "active": false,
+    "rejection_reason": "gate_failed: PR-AUC drop (-0.7333) or F1 drop (-1.0000) exceeded allowed threshold (-0.01)"
+  },
+  {
+    "version": 3,
+    "date": "2026-11-14T18:04:27.103971+00:00",
+    "model_path": "models\\versions\\ranker_v3.txt",
+    "n_cases_used": 6,
+    "gate_metrics": {
+      "old_pr_auc": 1.0,
+      "candidate_pr_auc": 1.0,
+      "old_f1": 1.0,
+      "candidate_f1": 1.0,
+      "pr_auc_diff": 0.0,
+      "f1_diff": 0.0,
+      "max_metric_drop_allowed": 0.01
+    },
+    "promoted": true,
+    "active": false
+  },
+  {
+    "version": 4,
+    "date": "2026-11-14T18:10:35.185682+00:00",
+    "model_path": "models\\versions\\ranker_v4.txt",
+    "n_cases_used": 6,
+    "gate_metrics": {
+      "old_pr_auc": 1.0,
+      "candidate_pr_auc": 1.0,
+      "old_f1": 1.0,
+      "candidate_f1": 1.0,
+      "pr_auc_diff": 0.0,
+      "f1_diff": 0.0,
+      "max_metric_drop_allowed": 0.01
+    },
+    "promoted": true,
+    "active": false
+  },
+  {
+    "version": 5,
+    "date": "2026-11-14T18:33:34.133807+00:00",
+    "model_path": "models\\versions\\ranker_v5.txt",
+    "n_cases_used": 9,
+    "gate_metrics": {
+      "old_pr_auc": 1.0,
+      "candidate_pr_auc": 1.0,
+      "old_f1": 1.0,
+      "candidate_f1": 1.0,
+      "pr_auc_diff": 0.0,
+      "f1_diff": 0.0,
+      "max_metric_drop_allowed": 0.01
+    },
+    "promoted": true,
+    "active": false
+  },
+  {
+    "version": 6,
+    "date": "2026-11-14T18:37:15.251278+00:00",
+    "model_path": "models\\versions\\ranker_v6.txt",
+    "n_cases_used": 9,
+    "gate_metrics": {
+      "old_pr_auc": 1.0,
+      "candidate_pr_auc": 1.0,
+      "old_f1": 1.0,
+      "candidate_f1": 1.0,
+      "pr_auc_diff": 0.0,
+      "f1_diff": 0.0,
+      "max_metric_drop_allowed": 0.01
+    },
+    "promoted": true,
+    "active": false
+  },
+  {
+    "version": 7,
+    "date": "2026-11-14T18:37:15.478104+00:00",
+    "model_path": "models\\versions\\ranker_v7.txt",
+    "n_cases_used": 9,
+    "gate_metrics": {
+      "old_pr_auc": 1.0,
+      "candidate_pr_auc": 1.0,
+      "old_f1": 1.0,
+      "candidate_f1": 1.0,
+      "pr_auc_diff": 0.0,
+      "f1_diff": 0.0,
+      "max_metric_drop_allowed": 0.01
+    },
+    "promoted": true,
+    "active": false
+  },
+  {
+    "version": 8,
+    "date": "2026-11-14T18:37:44.492367+00:00",
+    "model_path": "models\\versions\\ranker_v8.txt",
+    "n_cases_used": 9,
+    "gate_metrics": {
+      "old_pr_auc": 1.0,
+      "candidate_pr_auc": 1.0,
+      "old_f1": 1.0,
+      "candidate_f1": 1.0,
+      "pr_auc_diff": 0.0,
+      "f1_diff": 0.0,
+      "max_metric_drop_allowed": 0.01
+    },
+    "promoted": true,
+    "active": false
+  },
+  {
+    "version": 9,
+    "date": "2026-11-14T20:34:19.614797+00:00",
+    "model_path": "models\\versions\\ranker_v9.txt",
+    "n_cases_used": 10,
+    "gate_metrics": {
+      "old_pr_auc": 1.0,
+      "candidate_pr_auc": 1.0,
+      "old_f1": 1.0,
+      "candidate_f1": 1.0,
+      "pr_auc_diff": 0.0,
+      "f1_diff": 0.0,
+      "max_metric_drop_allowed": 0.01
+    },
+    "promoted": true,
+    "active": true
+  }
+]

@@ -1,0 +1,22 @@
+timestamp,step,metric,value,note
+2026-11-14T18:01:15.807614+00:00,step1,score_before,0.0099,7-hop mule chain — before learning
+2026-11-14T18:01:16.007238+00:00,step2,incidents_added,5,all approved for retraining
+2026-11-14T18:01:16.059272+00:00,step2_retrain,old_pr_auc,1.0,retrain gate metrics
+2026-11-14T18:01:16.059531+00:00,step2_retrain,candidate_pr_auc,1.0,retrain gate metrics
+2026-11-14T18:01:16.059832+00:00,step2_retrain,old_f1,1.0,retrain gate metrics
+2026-11-14T18:01:16.060074+00:00,step2_retrain,candidate_f1,1.0,retrain gate metrics
+2026-11-14T18:01:16.060317+00:00,step2_retrain,pr_auc_diff,0.0,retrain gate metrics
+2026-11-14T18:01:16.060528+00:00,step2_retrain,f1_diff,0.0,retrain gate metrics
+2026-11-14T18:01:16.061037+00:00,step2_retrain,max_metric_drop_allowed,0.01,retrain gate metrics
+2026-11-14T18:01:16.061306+00:00,step2_retrain,promoted,True,Candidate model v2 passed the safety gate and was promoted.
+2026-11-14T18:01:16.077062+00:00,step3,score_after,0.9679,same 7-hop mule chain — after learning
+2026-11-14T18:01:16.077335+00:00,step3,score_improvement,+0.9580,delta (positive = better detection)
+2026-11-14T18:01:16.077637+00:00,step4,gate_passed,True,"PR-AUC diff=0.0000, F1 diff=0.0000"
+2026-11-14T18:01:16.113742+00:00,step5_bad,old_pr_auc,1.0,flipped-label gate metrics
+2026-11-14T18:01:16.113971+00:00,step5_bad,candidate_pr_auc,0.2667,flipped-label gate metrics
+2026-11-14T18:01:16.114166+00:00,step5_bad,old_f1,1.0,flipped-label gate metrics
+2026-11-14T18:01:16.114353+00:00,step5_bad,candidate_f1,0.0,flipped-label gate metrics
+2026-11-14T18:01:16.114540+00:00,step5_bad,pr_auc_diff,-0.7333,flipped-label gate metrics
+2026-11-14T18:01:16.114747+00:00,step5_bad,f1_diff,-1.0,flipped-label gate metrics
+2026-11-14T18:01:16.114941+00:00,step5_bad,max_metric_drop_allowed,0.01,flipped-label gate metrics
+2026-11-14T18:01:16.115169+00:00,step5_bad,bad_rejected,True,gate_failed: PR-AUC drop (-0.7333) or F1 drop (-1.0000) exceeded allowed threshold (-0.01)

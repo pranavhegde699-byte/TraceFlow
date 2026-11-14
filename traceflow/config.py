@@ -3,10 +3,21 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
+from pathlib import Path
+import yaml
 
 from dotenv import load_dotenv
 
 load_dotenv()
+
+
+@dataclass
+class LearningConfig:
+    min_new_cases_to_retrain: int = 5
+    case_weight: float = 5.0
+    max_case_weight_share: float = 0.2
+    gate_max_metric_drop: float = 0.01
+    incident_tx_id_offset: int = 10_000_000_000
 
 
 @dataclass
@@ -56,7 +67,26 @@ class Config:
     GROQ_API_KEY: str = field(default_factory=lambda: os.getenv("GROQ_API_KEY", ""))
     GROQ_MODEL: str = field(default_factory=lambda: os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"))
 
+    # Learning Loop
+    learning: LearningConfig = field(default_factory=LearningConfig)
+
     def __post_init__(self) -> None:
+        # Load from config.yaml if present
+        cfg_yaml_path = Path("config.yaml")
+        if cfg_yaml_path.exists():
+            try:
+                with open(cfg_yaml_path, "r", encoding="utf-8") as f:
+                    data = yaml.safe_load(f) or {}
+                l_data = data.get("learning", {})
+                if l_data:
+                    self.learning.min_new_cases_to_retrain = int(l_data.get("min_new_cases_to_retrain", self.learning.min_new_cases_to_retrain))
+                    self.learning.case_weight = float(l_data.get("case_weight", self.learning.case_weight))
+                    self.learning.max_case_weight_share = float(l_data.get("max_case_weight_share", self.learning.max_case_weight_share))
+                    self.learning.gate_max_metric_drop = float(l_data.get("gate_max_metric_drop", self.learning.gate_max_metric_drop))
+                    self.learning.incident_tx_id_offset = int(l_data.get("incident_tx_id_offset", self.learning.incident_tx_id_offset))
+            except Exception:
+                pass
+
         assert abs(self.TRAIN_SPLIT + self.VAL_SPLIT + self.TEST_SPLIT - 1.0) < 1e-6, (
             "TRAIN_SPLIT + VAL_SPLIT + TEST_SPLIT must equal 1.0"
         )

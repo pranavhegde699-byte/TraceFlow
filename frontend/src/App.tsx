@@ -25,12 +25,13 @@ import { FraudDetection } from './pages/FraudDetection';
 import { RiskAssessment } from './pages/RiskAssessment';
 import { InvestigationCases } from './pages/InvestigationCases';
 import { EvidenceReports } from './pages/EvidenceReports';
+import { Learning } from './pages/Learning';
 import { MetricsTable } from './components/MetricsTable';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<PageView>('dashboard');
   const [datasets, setDatasets] = useState<DatasetItem[]>([]);
-  const [activeDatasetId, setActiveDatasetId] = useState<string>('nft-sample-001');
+  const [activeDatasetId, setActiveDatasetId] = useState<string>('');
   const [summary, setSummary] = useState<AnalysisSummary | null>(null);
   const [cases, setCases] = useState<CaseListItem[]>([]);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
@@ -41,10 +42,12 @@ export const App: React.FC = () => {
 
   // 1. Initial Load: health, datasets, metrics
   const loadInitialData = async () => {
+    let resolvedActiveId = '';
     try {
       const h = await getHealth();
       setBackendOnline(true);
-      if (h.active_dataset) {
+      if (h.active_dataset && h.active_dataset !== 'nft-sample-001') {
+        resolvedActiveId = h.active_dataset;
         setActiveDatasetId(h.active_dataset);
       }
     } catch {
@@ -55,7 +58,11 @@ export const App: React.FC = () => {
       const d = await getDatasets();
       setDatasets(d.datasets);
       if (d.active_dataset_id) {
+        resolvedActiveId = d.active_dataset_id;
         setActiveDatasetId(d.active_dataset_id);
+      } else if (d.datasets && d.datasets.length > 0 && !resolvedActiveId) {
+        resolvedActiveId = d.datasets[0].id;
+        setActiveDatasetId(d.datasets[0].id);
       }
     } catch (e) {
       console.error('Failed to load datasets:', e);
@@ -186,7 +193,7 @@ export const App: React.FC = () => {
         )}
 
         {currentView === 'wallets' && (
-          <RiskAssessment onNavigate={setCurrentView} />
+          <RiskAssessment activeDatasetId={activeDatasetId} onNavigate={setCurrentView} />
         )}
 
         {currentView === 'datasets' && (
@@ -217,6 +224,10 @@ export const App: React.FC = () => {
             cases={cases}
             onSelectCaseId={setSelectedCaseId}
           />
+        )}
+
+        {currentView === 'learning' && (
+          <Learning activeDatasetId={activeDatasetId} onNavigate={setCurrentView} />
         )}
       </main>
 

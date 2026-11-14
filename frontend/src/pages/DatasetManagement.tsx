@@ -43,6 +43,9 @@ export const DatasetManagement: React.FC<DatasetManagementProps> = ({
       setUploadResult(res);
       setFile(null);
       setCustomName('');
+      if (res.dataset_id) {
+        onSelectDataset(res.dataset_id);
+      }
       onRefresh();
     } catch (err: any) {
       setError(err.message || 'Upload failed');

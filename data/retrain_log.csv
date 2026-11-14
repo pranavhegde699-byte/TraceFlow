@@ -1,0 +1,10 @@
+timestamp,version,n_cases_used,promoted,pr_auc_diff,f1_diff,reason
+2026-11-14T18:01:16.058713+00:00,2,5,True,0.0000,0.0000,Gate passed: model promoted
+2026-11-14T18:01:16.113153+00:00,3,5,False,-0.7333,-1.0000,gate_failed: PR-AUC drop (-0.7333) or F1 drop (-1.0000) exceeded allowed threshold (-0.01)
+2026-11-14T18:04:27.108150+00:00,3,6,True,0.0000,0.0000,Gate passed: model promoted
+2026-11-14T18:10:35.190181+00:00,4,6,True,0.0000,0.0000,Gate passed: model promoted
+2026-11-14T18:33:34.138333+00:00,5,9,True,0.0000,0.0000,Gate passed: model promoted
+2026-11-14T18:37:15.255561+00:00,6,9,True,0.0000,0.0000,Gate passed: model promoted
+2026-11-14T18:37:15.482365+00:00,7,9,True,0.0000,0.0000,Gate passed: model promoted
+2026-11-14T18:37:44.496701+00:00,8,9,True,0.0000,0.0000,Gate passed: model promoted
+2026-11-14T20:34:19.623680+00:00,9,10,True,0.0000,0.0000,Gate passed: model promoted

@@ -1,0 +1,29 @@
+# TraceFlow System Configuration
+
+time_window_hours: 24.0
+fan_in_out_min_counterparties: 5
+cycle_min_length: 3
+cycle_max_length: 5
+pass_through_min_hops: 3
+pass_through_max_dwell_hours: 1.0
+retention_band_low: 0.85
+retention_band_high: 1.0
+cluster_size_cap: 30
+cluster_label_illicit_threshold: 0.5
+train_split: 0.6
+val_split: 0.2
+test_split: 0.2
+amount_threshold_baseline: 10000.0
+precision_at_k: 20
+ibm_csv_path: data/HI-Small_Trans.csv
+results_dir: results
+models_dir: models
+llm_enabled: false
+
+# Learning Loop configuration
+learning:
+  min_new_cases_to_retrain: 5
+  case_weight: 5.0            # weight of an approved case vs a normal row
+  max_case_weight_share: 0.2  # approved cases may be at most 20% of training weight
+  gate_max_metric_drop: 0.01  # new model may not lose more than this on frozen validation
+  incident_tx_id_offset: 10000000000

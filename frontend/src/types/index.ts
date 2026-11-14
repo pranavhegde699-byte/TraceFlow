@@ -214,4 +214,50 @@ export type PageView =
   | "wallets"
   | "datasets"
   | "analysis"
-  | "evidence";
+  | "evidence"
+  | "learning";
+
+export interface CaseStoreItem {
+  case_id: string;
+  cluster_id?: string | null;
+  edge_ids: number[];
+  accounts: string[];
+  typology: string;
+  label: number;
+  source: string;
+  source_ref: string;
+  status: "pending" | "approved" | "rejected";
+  added_at: string;
+  approved_by?: string | null;
+}
+
+export interface ModelRegistryItem {
+  version: number;
+  date: string;
+  model_path: string;
+  n_cases_used: number;
+  gate_metrics: {
+    old_pr_auc?: number;
+    candidate_pr_auc?: number;
+    old_f1?: number;
+    candidate_f1?: number;
+    pr_auc_diff?: number;
+    f1_diff?: number;
+    max_metric_drop_allowed?: number;
+  };
+  promoted: boolean;
+  active: boolean;
+  rejection_reason?: string;
+}
+
+export interface LearningStatus {
+  status_counts: {
+    approved: number;
+    pending: number;
+    rejected: number;
+    total: number;
+  };
+  cases_waiting_since_last_retrain: number;
+  current_model_version: string;
+  last_gate_result: any;
+}

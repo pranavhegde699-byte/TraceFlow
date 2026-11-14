@@ -85,7 +85,19 @@ def get_analysis_summary(dataset_id: Optional[str] = None, db: Session = Depends
     target_id = dataset_id or get_active_dataset_id()
     ds = db.query(DatasetModel).filter(DatasetModel.id == target_id).first()
     if not ds:
-        raise HTTPException(status_code=404, detail="Dataset not found")
+        # Fallback to first available dataset if requested ID is stale or not found
+        ds = db.query(DatasetModel).order_by(DatasetModel.created_at.desc()).first()
+        if not ds:
+            raise HTTPException(status_code=404, detail="Dataset not found")
+        target_id = ds.id
+
+    if ds.status != "analyzed":
+        try:
+            from traceflow.pipeline_runner import run_analysis_pipeline
+            run_analysis_pipeline(ds.file_path, ds.name, ds.id)
+            db.refresh(ds)
+        except Exception:
+            pass
 
     total_clusters = db.query(FraudClusterModel).filter(FraudClusterModel.dataset_id == target_id).count()
     clusters = db.query(FraudClusterModel).filter(FraudClusterModel.dataset_id == target_id).all()

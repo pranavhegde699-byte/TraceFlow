@@ -3,10 +3,11 @@ import type { WalletItem, PageView } from '../types';
 import { getWallets } from '../services/api';
 
 interface RiskAssessmentProps {
+  activeDatasetId?: string;
   onNavigate: (view: PageView) => void;
 }
 
-export const RiskAssessment: React.FC<RiskAssessmentProps> = ({ onNavigate: _onNavigate }) => {
+export const RiskAssessment: React.FC<RiskAssessmentProps> = ({ onNavigate: _onNavigate, activeDatasetId }) => {
   const [wallets, setWallets] = useState<WalletItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -19,6 +20,7 @@ export const RiskAssessment: React.FC<RiskAssessmentProps> = ({ onNavigate: _onN
     setLoading(true);
     try {
       const data = await getWallets({
+        dataset_id: activeDatasetId,
         min_risk: minRisk,
         search: search || undefined,
         is_scc: onlyScc ? true : undefined,
@@ -35,8 +37,12 @@ export const RiskAssessment: React.FC<RiskAssessmentProps> = ({ onNavigate: _onN
   };
 
   useEffect(() => {
+    setPage(1);
+  }, [activeDatasetId]);
+
+  useEffect(() => {
     fetchWallets();
-  }, [minRisk, onlyScc, page]);
+  }, [activeDatasetId, minRisk, onlyScc, page]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();

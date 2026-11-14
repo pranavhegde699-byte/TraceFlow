@@ -20,6 +20,24 @@ def list_wallets(
     db: Session = Depends(get_db)
 ):
     target_id = dataset_id or get_active_dataset_id()
+    # Ensure target_id exists in database
+    ds = db.query(WalletModel).filter(WalletModel.dataset_id == target_id).first()
+    if not ds:
+        # Check if dataset itself exists
+        from api.db_models import DatasetModel
+        d_rec = db.query(DatasetModel).filter(DatasetModel.id == target_id).first()
+        if d_rec and d_rec.status != "analyzed":
+            try:
+                from traceflow.pipeline_runner import run_analysis_pipeline
+                run_analysis_pipeline(d_rec.file_path, d_rec.name, d_rec.id)
+            except Exception:
+                pass
+        elif not d_rec:
+            # Fall back to first available dataset
+            first_ds = db.query(DatasetModel).order_by(DatasetModel.created_at.desc()).first()
+            if first_ds:
+                target_id = first_ds.id
+
     query = db.query(WalletModel).filter(
         WalletModel.dataset_id == target_id,
         WalletModel.risk_score >= min_risk
@@ -63,6 +81,12 @@ def get_wallet_detail(wallet_id: str, dataset_id: Optional[str] = None, db: Sess
         WalletModel.dataset_id == target_id,
         WalletModel.id == wallet_id
     ).first()
+
+    if not w:
+        # Fallback search across any dataset
+        w = db.query(WalletModel).filter(WalletModel.id == wallet_id).first()
+        if w:
+            target_id = w.dataset_id
 
     if not w:
         raise HTTPException(status_code=404, detail="Wallet not found")
